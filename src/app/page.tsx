@@ -5,7 +5,8 @@ import { createClient } from '@/lib/supabase'
 import { useAuth } from '@/components/AuthProvider'
 import { STATUS_LABELS, CATEGORY_LABELS } from '@/lib/constants'
 import { StatusBadge, PriorityBadge } from '@/components/StatusBadge'
-import type { Complaint, ComplaintStatus, ComplaintCategory } from '@/lib/types'
+import type { Complaint, ComplaintStatus, ComplaintCategory, EquipmentStatus } from '@/lib/types'
+import { EQUIPMENT_STATUS_LABELS, EQUIPMENT_STATUS_COLORS } from '@/lib/constants'
 import {
   ClipboardList,
   UserCheck,
@@ -13,6 +14,7 @@ import {
   CheckCircle2,
   AlertTriangle,
   ArrowRight,
+  Wrench,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -23,6 +25,14 @@ interface Stats {
   completed: number
   overdue: number
   byCategory: Record<string, number>
+}
+
+interface FacilityStats {
+  total: number
+  normal: number
+  broken: number
+  repairing: number
+  facilities: { name: string; broken: number; repairing: number }[]
 }
 
 const STAT_CARDS = [
@@ -37,6 +47,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [recent, setRecent] = useState<Complaint[]>([])
   const [overdue, setOverdue] = useState<Complaint[]>([])
+  const [facilityStats, setFacilityStats] = useState<FacilityStats>({ total: 0, normal: 0, broken: 0, repairing: 0, facilities: [] })
 
   useEffect(() => {
     if (authLoading) return
@@ -74,6 +85,26 @@ export default function DashboardPage() {
         .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
         .slice(0, 5)
       setRecent(recentSorted)
+
+      const { data: eqData } = await supabase
+        .from('equipment')
+        .select('*, facility:facilities(name)')
+
+      if (eqData) {
+        const fs: FacilityStats = { total: eqData.length, normal: 0, broken: 0, repairing: 0, facilities: [] }
+        const byFacility: Record<string, { name: string; broken: number; repairing: number }> = {}
+        for (const eq of eqData) {
+          if (eq.status === 'normal') fs.normal++
+          if (eq.status === 'broken') fs.broken++
+          if (eq.status === 'repairing') fs.repairing++
+          const fname = (eq.facility as { name: string })?.name || '기타'
+          if (!byFacility[fname]) byFacility[fname] = { name: fname, broken: 0, repairing: 0 }
+          if (eq.status === 'broken') byFacility[fname].broken++
+          if (eq.status === 'repairing') byFacility[fname].repairing++
+        }
+        fs.facilities = Object.values(byFacility).filter((f) => f.broken > 0 || f.repairing > 0)
+        setFacilityStats(fs)
+      }
     }
 
     load()
@@ -193,6 +224,52 @@ export default function DashboardPage() {
               <div className="text-center text-sm text-slate-400 py-4">데이터 없음</div>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl border border-slate-200">
+        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Wrench size={16} className="text-slate-500" />
+            <h2 className="font-semibold text-slate-900">시설 설비 현황</h2>
+          </div>
+          <Link href="/facilities" className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
+            전체보기 <ArrowRight size={12} />
+          </Link>
+        </div>
+        <div className="p-4">
+          <div className="flex gap-6 mb-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-slate-900">{facilityStats.total}</div>
+              <div className="text-xs text-slate-500">전체</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-700">{facilityStats.normal}</div>
+              <div className="text-xs text-slate-500">정상</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-red-700">{facilityStats.broken}</div>
+              <div className="text-xs text-slate-500">고장</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-700">{facilityStats.repairing}</div>
+              <div className="text-xs text-slate-500">수리중</div>
+            </div>
+          </div>
+          {facilityStats.facilities.length > 0 && (
+            <div className="space-y-2">
+              {facilityStats.facilities.map((f) => (
+                <div key={f.name} className="flex items-center gap-2 text-sm">
+                  <span className="text-slate-700 font-medium">{f.name}</span>
+                  {f.broken > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">고장 {f.broken}</span>}
+                  {f.repairing > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">수리중 {f.repairing}</span>}
+                </div>
+              ))}
+            </div>
+          )}
+          {facilityStats.total === 0 && (
+            <div className="text-center text-sm text-slate-400 py-2">등록된 설비 없음</div>
+          )}
         </div>
       </div>
     </div>

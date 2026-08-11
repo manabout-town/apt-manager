@@ -56,3 +56,56 @@ export interface ComplaintLog {
   note: string | null
   created_at: string
 }
+
+export type FacilityType =
+  | 'gym' | 'golf' | 'library' | 'sauna' | 'kids_cafe'
+  | 'community' | 'parking' | 'playground' | 'other'
+
+export type EquipmentStatus = 'normal' | 'broken' | 'repairing' | 'disposed'
+export type MaintenanceType = 'repair' | 'inspection' | 'replacement'
+export type MaintenanceStatus = 'pending' | 'in_progress' | 'completed'
+
+export interface Facility {
+  id: string
+  name: string
+  location: string | null
+  type: FacilityType
+  description: string | null
+  is_active: boolean
+  created_at: string
+  equipment?: Equipment[]
+}
+
+export interface Equipment {
+  id: string
+  facility_id: string
+  facility?: Facility
+  name: string
+  model: string | null
+  status: EquipmentStatus
+  installed_at: string | null
+  next_inspection_at: string | null
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface MaintenanceLog {
+  id: string
+  equipment_id: string | null
+  equipment?: Equipment
+  facility_id: string
+  facility?: Facility
+  type: MaintenanceType
+  title: string
+  description: string | null
+  status: MaintenanceStatus
+  assigned_to: string | null
+  assigned_employee?: Employee
+  photos: string[]
+  cost: number
+  started_at: string | null
+  completed_at: string | null
+  created_at: string
+  created_by: string | null
+}

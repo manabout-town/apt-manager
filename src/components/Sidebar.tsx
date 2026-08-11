@@ -6,6 +6,7 @@ import { useAuth } from './AuthProvider'
 import {
   LayoutDashboard,
   MessageSquareWarning,
+  Wrench,
   LogOut,
   Building2,
   Menu,
@@ -17,6 +18,7 @@ import { ROLE_LABELS } from '@/lib/constants'
 const NAV = [
   { href: '/', label: '대시보드', icon: LayoutDashboard },
   { href: '/complaints', label: '민원 관리', icon: MessageSquareWarning },
+  { href: '/facilities', label: '시설 관리', icon: Wrench },
 ]
 
 export default function Sidebar() {

@@ -1,4 +1,4 @@
-import type { ComplaintStatus, ComplaintPriority, ComplaintCategory, EmployeeRole, Department } from './types'
+import type { ComplaintStatus, ComplaintPriority, ComplaintCategory, EmployeeRole, Department, FacilityType, EquipmentStatus, MaintenanceType, MaintenanceStatus } from './types'
 
 export const STATUS_LABELS: Record<ComplaintStatus, string> = {
   received: '접수',
@@ -52,4 +52,48 @@ export const DEPARTMENT_LABELS: Record<Department, string> = {
   cleaning: '미화',
   security: '경비',
   other: '기타',
+}
+
+export const FACILITY_TYPE_LABELS: Record<FacilityType, string> = {
+  gym: '헬스장',
+  golf: '스크린골프',
+  library: '독서실',
+  sauna: '사우나',
+  kids_cafe: '키즈카페',
+  community: '커뮤니티센터',
+  parking: '주차장',
+  playground: '놀이터',
+  other: '기타',
+}
+
+export const EQUIPMENT_STATUS_LABELS: Record<EquipmentStatus, string> = {
+  normal: '정상',
+  broken: '고장',
+  repairing: '수리중',
+  disposed: '폐기',
+}
+
+export const EQUIPMENT_STATUS_COLORS: Record<EquipmentStatus, string> = {
+  normal: 'bg-green-100 text-green-800',
+  broken: 'bg-red-100 text-red-800',
+  repairing: 'bg-orange-100 text-orange-800',
+  disposed: 'bg-slate-100 text-slate-500',
+}
+
+export const MAINTENANCE_TYPE_LABELS: Record<MaintenanceType, string> = {
+  repair: '수리',
+  inspection: '점검',
+  replacement: '교체',
+}
+
+export const MAINTENANCE_STATUS_LABELS: Record<MaintenanceStatus, string> = {
+  pending: '대기',
+  in_progress: '진행중',
+  completed: '완료',
+}
+
+export const MAINTENANCE_STATUS_COLORS: Record<MaintenanceStatus, string> = {
+  pending: 'bg-yellow-100 text-yellow-800',
+  in_progress: 'bg-blue-100 text-blue-800',
+  completed: 'bg-green-100 text-green-800',
 }
