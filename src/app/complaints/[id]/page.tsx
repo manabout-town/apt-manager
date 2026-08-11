@@ -114,26 +114,26 @@ export default function ComplaintDetailPage({ params }: { params: Promise<{ id: 
   }
 
   if (loading || !complaint) {
-    return <div className="flex items-center justify-center h-screen text-slate-400">로딩 중...</div>
+    return <div className="flex items-center justify-center h-screen" style={{ color: 'var(--text-disabled)' }}>로딩 중...</div>
   }
 
   const isOverdue = complaint.deadline && complaint.status !== 'completed' && new Date(complaint.deadline) < new Date()
   const transitions = STATUS_TRANSITIONS[complaint.status] || []
 
   return (
-    <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center gap-3">
-        <Link href="/complaints" className="text-slate-400 hover:text-slate-600">
+    <div className="page animate-fade-in">
+      <div className="flex items-center gap-3 mb-6">
+        <Link href="/complaints" style={{ color: 'var(--text-disabled)' }} className="hover:opacity-70">
           <ArrowLeft size={20} />
         </Link>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold text-slate-900 truncate">{complaint.title}</h1>
+          <h1 className="page-title truncate">{complaint.title}</h1>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
             <StatusBadge status={complaint.status} />
             <PriorityBadge priority={complaint.priority} />
             <CategoryBadge category={complaint.category} />
             {isOverdue && (
-              <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">기한 초과</span>
+              <span className="badge text-red-600 bg-red-50">기한 초과</span>
             )}
           </div>
         </div>
@@ -142,93 +142,97 @@ export default function ComplaintDetailPage({ params }: { params: Promise<{ id: 
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2 space-y-6">
           {complaint.description && (
-            <div className="bg-white rounded-xl border border-slate-200 p-5">
-              <h2 className="font-semibold text-slate-900 mb-3">상세 내용</h2>
-              <p className="text-sm text-slate-700 whitespace-pre-wrap">{complaint.description}</p>
+            <div className="card p-5">
+              <h2 className="section-title mb-3">상세 내용</h2>
+              <p className="text-sm whitespace-pre-wrap" style={{ color: 'var(--text-body)' }}>{complaint.description}</p>
             </div>
           )}
 
-          <div className="bg-white rounded-xl border border-slate-200">
-            <div className="p-4 border-b border-slate-100 flex items-center gap-2">
-              <MessageSquare size={16} className="text-slate-500" />
-              <h2 className="font-semibold text-slate-900">코멘트 ({comments.length})</h2>
+          <div className="card">
+            <div className="section-header">
+              <div className="flex items-center gap-2">
+                <MessageSquare size={16} style={{ color: 'var(--text-muted)' }} />
+                <span className="section-title">코멘트 ({comments.length})</span>
+              </div>
             </div>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y" style={{ borderColor: 'var(--surface-border)' }}>
               {comments.map((c) => (
                 <div key={c.id} className="p-4">
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-sm font-medium text-slate-900">{c.employee?.name}</span>
-                    <span className="text-xs text-slate-400">
+                    <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{c.employee?.name}</span>
+                    <span className="text-xs" style={{ color: 'var(--text-disabled)' }}>
                       {formatDistanceToNow(new Date(c.created_at), { addSuffix: true, locale: ko })}
                     </span>
                   </div>
-                  <p className="text-sm text-slate-700">{c.content}</p>
+                  <p className="text-sm" style={{ color: 'var(--text-body)' }}>{c.content}</p>
                 </div>
               ))}
               {comments.length === 0 && (
-                <div className="p-8 text-center text-sm text-slate-400">코멘트가 없습니다.</div>
+                <div className="p-8 text-center text-sm" style={{ color: 'var(--text-disabled)' }}>코멘트가 없습니다.</div>
               )}
             </div>
-            <div className="p-4 border-t border-slate-100 flex gap-2">
+            <div className="p-4 flex gap-2" style={{ borderTop: '1px solid var(--surface-border)' }}>
               <input
                 type="text"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && addComment()}
                 placeholder="코멘트 작성..."
-                className="flex-1 px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input flex-1"
               />
               <button
                 onClick={addComment}
                 disabled={!newComment.trim()}
-                className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="btn btn-primary disabled:opacity-50"
               >
                 <Send size={16} />
               </button>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200">
-            <div className="p-4 border-b border-slate-100 flex items-center gap-2">
-              <History size={16} className="text-slate-500" />
-              <h2 className="font-semibold text-slate-900">처리 이력</h2>
+          <div className="card">
+            <div className="section-header">
+              <div className="flex items-center gap-2">
+                <History size={16} style={{ color: 'var(--text-muted)' }} />
+                <span className="section-title">처리 이력</span>
+              </div>
             </div>
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y" style={{ borderColor: 'var(--surface-border)' }}>
               {logs.map((log) => (
                 <div key={log.id} className="p-4 flex items-start gap-3">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 mt-1.5 shrink-0" />
+                  <div className="w-2 h-2 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: 'var(--accent)' }} />
                   <div>
-                    <div className="text-sm text-slate-700">
+                    <div className="text-sm" style={{ color: 'var(--text-body)' }}>
                       {log.employee?.name && <span className="font-medium">{log.employee.name}</span>}
                       {log.old_status && (
                         <> {STATUS_LABELS[log.old_status]} → </>
                       )}
                       <span className="font-medium">{STATUS_LABELS[log.new_status]}</span>
-                      {log.note && <span className="text-slate-500"> · {log.note}</span>}
+                      {log.note && <span style={{ color: 'var(--text-muted)' }}> · {log.note}</span>}
                     </div>
-                    <div className="text-xs text-slate-400 mt-0.5">
+                    <div className="text-xs mt-0.5" style={{ color: 'var(--text-disabled)' }}>
                       {format(new Date(log.created_at), 'yyyy-MM-dd HH:mm', { locale: ko })}
                     </div>
                   </div>
                 </div>
               ))}
               {logs.length === 0 && (
-                <div className="p-8 text-center text-sm text-slate-400">이력이 없습니다.</div>
+                <div className="p-8 text-center text-sm" style={{ color: 'var(--text-disabled)' }}>이력이 없습니다.</div>
               )}
             </div>
           </div>
         </div>
 
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
-            <h2 className="font-semibold text-slate-900">상태 변경</h2>
+          <div className="card p-5 space-y-4">
+            <h2 className="section-title">상태 변경</h2>
             <div className="flex flex-wrap gap-2">
               {transitions.map((s) => (
                 <button
                   key={s}
                   onClick={() => updateStatus(s)}
                   disabled={updating}
-                  className="px-3 py-1.5 text-sm border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition-colors"
+                  className="btn btn-secondary disabled:opacity-50"
                 >
                   {STATUS_LABELS[s]}으로 변경
                 </button>
@@ -236,15 +240,15 @@ export default function ComplaintDetailPage({ params }: { params: Promise<{ id: 
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-4">
-            <h2 className="font-semibold text-slate-900">처리 정보</h2>
+          <div className="card p-5 space-y-4">
+            <h2 className="section-title">처리 정보</h2>
 
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">담당자</label>
+              <label className="label mb-1">담당자</label>
               <select
                 value={complaint.assigned_to || ''}
                 onChange={(e) => updateField('assigned_to', e.target.value || null)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input w-full"
               >
                 <option value="">미배정</option>
                 {employees.map((emp) => (
@@ -254,11 +258,11 @@ export default function ComplaintDetailPage({ params }: { params: Promise<{ id: 
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">우선순위</label>
+              <label className="label mb-1">우선순위</label>
               <select
                 value={complaint.priority}
                 onChange={(e) => updateField('priority', e.target.value)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input w-full"
               >
                 {Object.entries(PRIORITY_LABELS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
@@ -267,39 +271,39 @@ export default function ComplaintDetailPage({ params }: { params: Promise<{ id: 
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-500 mb-1">처리 기한</label>
+              <label className="label mb-1">처리 기한</label>
               <input
                 type="date"
                 value={complaint.deadline ? complaint.deadline.slice(0, 10) : ''}
                 onChange={(e) => updateField('deadline', e.target.value || null)}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-0"
+                className="input w-full min-w-0"
               />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-3">
-            <h2 className="font-semibold text-slate-900">신고자 정보</h2>
+          <div className="card p-5 space-y-3">
+            <h2 className="section-title">신고자 정보</h2>
             {complaint.reporter_name && (
               <div className="flex items-center gap-2 text-sm">
-                <User size={14} className="text-slate-400" />
-                <span className="text-slate-700">{complaint.reporter_name}</span>
+                <User size={14} style={{ color: 'var(--text-disabled)' }} />
+                <span style={{ color: 'var(--text-body)' }}>{complaint.reporter_name}</span>
               </div>
             )}
             {complaint.unit_number && (
-              <div className="text-sm text-slate-600">{complaint.unit_number}</div>
+              <div className="text-sm" style={{ color: 'var(--text-body)' }}>{complaint.unit_number}</div>
             )}
             {complaint.reporter_phone && (
-              <div className="text-sm text-slate-600">{complaint.reporter_phone}</div>
+              <div className="text-sm" style={{ color: 'var(--text-body)' }}>{complaint.reporter_phone}</div>
             )}
             {!complaint.reporter_name && !complaint.unit_number && (
-              <div className="text-sm text-slate-400">정보 없음</div>
+              <div className="text-sm" style={{ color: 'var(--text-disabled)' }}>정보 없음</div>
             )}
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 p-5 space-y-2">
-            <h2 className="font-semibold text-slate-900">타임라인</h2>
-            <div className="text-sm text-slate-600 flex items-center gap-2">
-              <Clock size={14} className="text-slate-400" />
+          <div className="card p-5 space-y-2">
+            <h2 className="section-title">타임라인</h2>
+            <div className="text-sm flex items-center gap-2" style={{ color: 'var(--text-body)' }}>
+              <Clock size={14} style={{ color: 'var(--text-disabled)' }} />
               접수: {format(new Date(complaint.created_at), 'yyyy-MM-dd HH:mm')}
             </div>
             {complaint.completed_at && (

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
 import Sidebar from "@/components/Sidebar";
+import { ToastProvider } from "@/components/Toast";
+import { SwRegister } from "@/components/SwRegister";
 
 export const metadata: Metadata = {
   title: "APT 관리",
@@ -14,8 +16,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="ko" className="h-full antialiased">
       <body className="min-h-full">
         <AuthProvider>
-          <Sidebar />
-          <main className="md:ml-64 min-h-screen">{children}</main>
+          <ToastProvider>
+            <Sidebar />
+            <main className="md:ml-60 min-h-screen">{children}</main>
+            <SwRegister />
+          </ToastProvider>
         </AuthProvider>
       </body>
     </html>

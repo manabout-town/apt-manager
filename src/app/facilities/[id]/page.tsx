@@ -101,7 +101,7 @@ export default function FacilityDetailPage({ params }: { params: Promise<{ id: s
   }
 
   if (loading || !facility) {
-    return <div className="flex items-center justify-center h-screen text-slate-400">로딩 중...</div>
+    return <div className="flex items-center justify-center h-screen" style={{ color: 'var(--text-disabled)' }}>로딩 중...</div>
   }
 
   const now = new Date()
@@ -110,78 +110,78 @@ export default function FacilityDetailPage({ params }: { params: Promise<{ id: s
   )
 
   return (
-    <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6">
+    <div className="page animate-fade-in">
       <div className="flex items-center gap-3">
-        <Link href="/facilities" className="text-slate-400 hover:text-slate-600">
+        <Link href="/facilities" className="link" style={{ color: 'var(--text-disabled)' }}>
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <div className="text-sm text-slate-500">{FACILITY_TYPE_LABELS[facility.type]}</div>
-          <h1 className="text-xl font-bold text-slate-900">{facility.name}</h1>
-          {facility.location && <div className="text-sm text-slate-500">{facility.location}</div>}
+          <div className="text-[12px]" style={{ color: 'var(--text-muted)' }}>{FACILITY_TYPE_LABELS[facility.type]}</div>
+          <h1 className="page-title">{facility.name}</h1>
+          {facility.location && <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{facility.location}</div>}
         </div>
       </div>
 
       {upcomingInspections.length > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <div className="text-sm font-medium text-blue-800 mb-1">7일 이내 점검 예정</div>
+        <div className="alert alert-info">
+          <div className="text-sm font-medium mb-1">7일 이내 점검 예정</div>
           {upcomingInspections.map((eq) => (
-            <div key={eq.id} className="text-sm text-blue-700">
+            <div key={eq.id} className="text-sm">
               {eq.name} — {format(new Date(eq.next_inspection_at!), 'M월 d일')}
             </div>
           ))}
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-slate-200">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-          <h2 className="font-semibold text-slate-900">설비 목록 ({equipment.length})</h2>
+      <div className="card">
+        <div className="section-header">
+          <h2 className="section-title">설비 목록 ({equipment.length})</h2>
           <button
             onClick={() => setShowAddEquipment(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+            className="btn btn-primary inline-flex items-center gap-1.5"
           >
             <Plus size={14} /> 설비 추가
           </button>
         </div>
 
         {showAddEquipment && (
-          <form onSubmit={addEquipment} className="p-4 bg-slate-50 border-b border-slate-100 flex flex-wrap gap-3 items-end">
+          <form onSubmit={addEquipment} className="p-4 flex flex-wrap gap-3 items-end" style={{ background: 'var(--bg-surface-raised)', borderBottom: '1px solid var(--surface-border)' }}>
             <div>
-              <label className="block text-xs text-slate-500 mb-1">이름 *</label>
+              <label className="label">이름 *</label>
               <input type="text" required value={eqForm.name} onChange={(e) => setEqForm({ ...eqForm, name: e.target.value })}
-                className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="러닝머신 3" />
+                className="input" placeholder="러닝머신 3" />
             </div>
             <div>
-              <label className="block text-xs text-slate-500 mb-1">모델</label>
+              <label className="label">모델</label>
               <input type="text" value={eqForm.model} onChange={(e) => setEqForm({ ...eqForm, model: e.target.value })}
-                className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="모델명" />
+                className="input" placeholder="모델명" />
             </div>
             <div>
-              <label className="block text-xs text-slate-500 mb-1">설치일</label>
+              <label className="label">설치일</label>
               <input type="date" value={eqForm.installed_at} onChange={(e) => setEqForm({ ...eqForm, installed_at: e.target.value })}
-                className="px-3 py-1.5 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-0" />
+                className="input min-w-0" />
             </div>
             <div className="flex gap-2">
-              <button type="submit" className="px-4 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">추가</button>
-              <button type="button" onClick={() => setShowAddEquipment(false)} className="px-3 py-1.5 text-sm text-slate-500 hover:text-slate-700">취소</button>
+              <button type="submit" className="btn btn-primary">추가</button>
+              <button type="button" onClick={() => setShowAddEquipment(false)} className="btn btn-secondary">취소</button>
             </div>
           </form>
         )}
 
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y" style={{ borderColor: 'var(--surface-border)' }}>
           {equipment.length === 0 ? (
-            <div className="p-8 text-center text-sm text-slate-400">등록된 설비가 없습니다.</div>
+            <div className="p-8 text-center text-sm" style={{ color: 'var(--text-disabled)' }}>등록된 설비가 없습니다.</div>
           ) : (
             equipment.map((eq) => (
               <div key={eq.id} className="p-4 flex items-center gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-slate-900">{eq.name}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${EQUIPMENT_STATUS_COLORS[eq.status]}`}>
+                    <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{eq.name}</span>
+                    <span className={`badge font-medium ${EQUIPMENT_STATUS_COLORS[eq.status]}`}>
                       {EQUIPMENT_STATUS_LABELS[eq.status]}
                     </span>
                   </div>
-                  <div className="text-xs text-slate-500 mt-0.5">
+                  <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
                     {eq.model && <span>{eq.model}</span>}
                     {eq.installed_at && <span> · 설치 {eq.installed_at}</span>}
                     {eq.next_inspection_at && <span> · 다음 점검 {eq.next_inspection_at}</span>}
@@ -192,7 +192,7 @@ export default function FacilityDetailPage({ params }: { params: Promise<{ id: s
                   <select
                     value={eq.status}
                     onChange={(e) => updateEquipmentStatus(eq.id, e.target.value as EquipmentStatus)}
-                    className="text-xs px-2 py-1 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input text-xs !px-2 !py-1"
                   >
                     {Object.entries(EQUIPMENT_STATUS_LABELS).map(([k, v]) => (
                       <option key={k} value={k}>{v}</option>
@@ -200,7 +200,8 @@ export default function FacilityDetailPage({ params }: { params: Promise<{ id: s
                   </select>
                   <button
                     onClick={() => { setShowAddLog(eq.id); setLogForm({ type: 'repair', title: '', description: '', assigned_to: '' }) }}
-                    className="p-1.5 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    className="p-1.5 rounded-lg transition-colors hover:bg-blue-50"
+                    style={{ color: 'var(--accent)' }}
                     title="정비 기록 추가"
                   >
                     <Wrench size={14} />
@@ -213,29 +214,29 @@ export default function FacilityDetailPage({ params }: { params: Promise<{ id: s
       </div>
 
       {showAddLog && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowAddLog(null)}>
-          <form onClick={(e) => e.stopPropagation()} onSubmit={addMaintenanceLog} className="bg-white rounded-xl w-full max-w-md p-5 space-y-4">
+        <div className="modal-overlay" onClick={() => setShowAddLog(null)}>
+          <form onClick={(e) => e.stopPropagation()} onSubmit={addMaintenanceLog} className="modal-content space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-slate-900">정비 기록 추가</h3>
-              <button type="button" onClick={() => setShowAddLog(null)}><X size={18} className="text-slate-400" /></button>
+              <h3 className="section-title">정비 기록 추가</h3>
+              <button type="button" onClick={() => setShowAddLog(null)}><X size={18} style={{ color: 'var(--text-disabled)' }} /></button>
             </div>
-            <div className="text-sm text-slate-500">
+            <div className="text-sm" style={{ color: 'var(--text-muted)' }}>
               {equipment.find((e) => e.id === showAddLog)?.name}
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs text-slate-500 mb-1">유형</label>
+                <label className="label">유형</label>
                 <select value={logForm.type} onChange={(e) => setLogForm({ ...logForm, type: e.target.value as MaintenanceType })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  className="input w-full">
                   {Object.entries(MAINTENANCE_TYPE_LABELS).map(([k, v]) => (
                     <option key={k} value={k}>{v}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-xs text-slate-500 mb-1">담당자</label>
+                <label className="label">담당자</label>
                 <select value={logForm.assigned_to} onChange={(e) => setLogForm({ ...logForm, assigned_to: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  className="input w-full">
                   <option value="">미배정</option>
                   {employees.map((emp) => (
                     <option key={emp.id} value={emp.id}>{emp.name}</option>
@@ -244,56 +245,58 @@ export default function FacilityDetailPage({ params }: { params: Promise<{ id: s
               </div>
             </div>
             <div>
-              <label className="block text-xs text-slate-500 mb-1">제목 *</label>
+              <label className="label">제목 *</label>
               <input type="text" required value={logForm.title} onChange={(e) => setLogForm({ ...logForm, title: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="벨트 교체 작업" />
+                className="input w-full" placeholder="벨트 교체 작업" />
             </div>
             <div>
-              <label className="block text-xs text-slate-500 mb-1">상세</label>
+              <label className="label">상세</label>
               <textarea value={logForm.description} onChange={(e) => setLogForm({ ...logForm, description: e.target.value })} rows={3}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" placeholder="상세 내용..." />
+                className="input w-full resize-none" placeholder="상세 내용..." />
             </div>
             <div className="flex justify-end gap-2">
-              <button type="button" onClick={() => setShowAddLog(null)} className="px-4 py-2 text-sm text-slate-600">취소</button>
-              <button type="submit" className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">등록</button>
+              <button type="button" onClick={() => setShowAddLog(null)} className="btn btn-secondary">취소</button>
+              <button type="submit" className="btn btn-primary">등록</button>
             </div>
           </form>
         </div>
       )}
 
-      <div className="bg-white rounded-xl border border-slate-200">
-        <div className="p-4 border-b border-slate-100 flex items-center gap-2">
-          <History size={16} className="text-slate-500" />
-          <h2 className="font-semibold text-slate-900">정비 이력</h2>
+      <div className="card">
+        <div className="section-header">
+          <div className="flex items-center gap-2">
+            <History size={16} style={{ color: 'var(--text-muted)' }} />
+            <h2 className="section-title">정비 이력</h2>
+          </div>
         </div>
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y" style={{ borderColor: 'var(--surface-border)' }}>
           {logs.length === 0 ? (
-            <div className="p-8 text-center text-sm text-slate-400">정비 이력이 없습니다.</div>
+            <div className="p-8 text-center text-sm" style={{ color: 'var(--text-disabled)' }}>정비 이력이 없습니다.</div>
           ) : (
             logs.map((log) => (
               <div key={log.id} className="p-4 flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-medium text-slate-900">{log.title}</span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${MAINTENANCE_STATUS_COLORS[log.status]}`}>
+                    <span className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{log.title}</span>
+                    <span className={`badge font-medium ${MAINTENANCE_STATUS_COLORS[log.status]}`}>
                       {MAINTENANCE_STATUS_LABELS[log.status]}
                     </span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                    <span className="badge" style={{ background: 'var(--bg-surface-raised)', color: 'var(--text-body)' }}>
                       {MAINTENANCE_TYPE_LABELS[log.type]}
                     </span>
                   </div>
-                  <div className="text-xs text-slate-500 mt-1">
+                  <div className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
                     {log.equipment?.name && <span>{log.equipment.name} · </span>}
                     {log.assigned_employee?.name && <span>담당: {log.assigned_employee.name} · </span>}
                     {format(new Date(log.created_at), 'yyyy-MM-dd HH:mm', { locale: ko })}
                   </div>
-                  {log.description && <div className="text-sm text-slate-600 mt-1">{log.description}</div>}
+                  {log.description && <div className="text-sm mt-1" style={{ color: 'var(--text-body)' }}>{log.description}</div>}
                 </div>
                 {log.status !== 'completed' && (
                   <select
                     value={log.status}
                     onChange={(e) => updateLogStatus(log.id, e.target.value as MaintenanceStatus)}
-                    className="text-xs px-2 py-1 border border-slate-300 rounded-lg shrink-0 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="input text-xs !px-2 !py-1 shrink-0"
                   >
                     {Object.entries(MAINTENANCE_STATUS_LABELS).map(([k, v]) => (
                       <option key={k} value={k}>{v}</option>

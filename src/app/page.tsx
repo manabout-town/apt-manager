@@ -5,8 +5,7 @@ import { createClient } from '@/lib/supabase'
 import { useAuth } from '@/components/AuthProvider'
 import { STATUS_LABELS, CATEGORY_LABELS } from '@/lib/constants'
 import { StatusBadge, PriorityBadge } from '@/components/StatusBadge'
-import type { Complaint, ComplaintStatus, ComplaintCategory, EquipmentStatus } from '@/lib/types'
-import { EQUIPMENT_STATUS_LABELS, EQUIPMENT_STATUS_COLORS } from '@/lib/constants'
+import type { Complaint, ComplaintStatus, ComplaintCategory } from '@/lib/types'
 import {
   ClipboardList,
   UserCheck,
@@ -15,6 +14,7 @@ import {
   AlertTriangle,
   ArrowRight,
   Wrench,
+  Clock,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -36,10 +36,10 @@ interface FacilityStats {
 }
 
 const STAT_CARDS = [
-  { key: 'received' as const, label: '접수', icon: ClipboardList, color: 'text-yellow-600', bg: 'bg-yellow-50' },
-  { key: 'assigned' as const, label: '배정됨', icon: UserCheck, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { key: 'in_progress' as const, label: '처리중', icon: Loader, color: 'text-orange-600', bg: 'bg-orange-50' },
-  { key: 'completed' as const, label: '완료', icon: CheckCircle2, color: 'text-green-600', bg: 'bg-green-50' },
+  { key: 'received' as const, label: '접수', icon: ClipboardList, accent: '#B8860B' },
+  { key: 'assigned' as const, label: '배정됨', icon: UserCheck, accent: '#4A7C91' },
+  { key: 'in_progress' as const, label: '처리중', icon: Clock, accent: '#C07040' },
+  { key: 'completed' as const, label: '완료', icon: CheckCircle2, accent: '#2B7A6F' },
 ]
 
 export default function DashboardPage() {
@@ -121,8 +121,8 @@ export default function DashboardPage() {
 
   if (authLoading || !stats) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="animate-spin text-slate-400" size={32} />
+      <div className="flex items-center justify-center h-screen" style={{ color: 'var(--text-disabled)' }}>
+        <Loader className="animate-spin" size={28} />
       </div>
     )
   }
@@ -130,66 +130,127 @@ export default function DashboardPage() {
   const total = stats.received + stats.assigned + stats.in_progress + stats.completed
 
   return (
-    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">대시보드</h1>
-        <p className="text-sm text-slate-500 mt-1">
-          {employee?.name}님, 오늘 민원 현황입니다.
-        </p>
+    <div className="page animate-fade-in">
+      <div
+        className="card overflow-hidden mb-6"
+        style={{
+          background: 'linear-gradient(135deg, rgba(43,122,111,0.06) 0%, var(--bg-surface) 60%)',
+        }}
+      >
+        <div className="flex items-center justify-between px-6 py-5">
+          <div>
+            <h1 className="text-[18px] font-semibold" style={{ color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+              {employee?.name}님, 안녕하세요
+            </h1>
+            <p className="text-[13px] mt-1" style={{ color: 'var(--text-muted)' }}>
+              오늘의 아파트 관리 현황을 확인하세요.
+            </p>
+          </div>
+          <svg viewBox="0 0 160 60" className="hidden sm:block w-[140px] shrink-0" fill="none" aria-hidden="true">
+            <rect x="2" y="22" width="22" height="36" rx="1.5" fill="rgba(43,122,111,0.12)" />
+            <rect x="6" y="26" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.25)" />
+            <rect x="16" y="26" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.35)" />
+            <rect x="6" y="33" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="16" y="33" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="6" y="40" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.15)" />
+            <rect x="16" y="40" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="28" y="8" width="32" height="50" rx="1.5" fill="rgba(43,122,111,0.16)" />
+            <rect x="34" y="13" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="50" y="13" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="34" y="21" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.25)" />
+            <rect x="50" y="21" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.35)" />
+            <rect x="34" y="29" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.35)" />
+            <rect x="50" y="29" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.15)" />
+            <rect x="34" y="37" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="50" y="37" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="34" y="45" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="50" y="45" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="64" y="18" width="28" height="40" rx="1.5" fill="rgba(43,122,111,0.1)" />
+            <rect x="70" y="23" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="84" y="23" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="70" y="31" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.15)" />
+            <rect x="84" y="31" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.35)" />
+            <rect x="70" y="39" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.25)" />
+            <rect x="84" y="39" width="3.5" height="2.5" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="96" y="5" width="36" height="53" rx="1.5" fill="rgba(43,122,111,0.14)" />
+            <rect x="103" y="10" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="123" y="10" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.35)" />
+            <rect x="103" y="18" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="123" y="18" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.15)" />
+            <rect x="103" y="26" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="123" y="26" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <rect x="103" y="34" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.35)" />
+            <rect x="123" y="34" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.2)" />
+            <rect x="103" y="42" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.25)" />
+            <rect x="123" y="42" width="4" height="3" rx="0.5" fill="rgba(43,122,111,0.3)" />
+            <circle cx="25" cy="54" r="3.5" fill="rgba(43,122,111,0.15)" />
+            <circle cx="63" cy="54" r="3" fill="rgba(43,122,111,0.12)" />
+            <circle cx="95" cy="54" r="3.5" fill="rgba(43,122,111,0.18)" />
+            <circle cx="135" cy="54" r="4" fill="rgba(43,122,111,0.13)" />
+            <rect x="0" y="57" width="160" height="1" rx="0.5" fill="rgba(43,122,111,0.08)" />
+          </svg>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {STAT_CARDS.map(({ key, label, icon: Icon, color, bg }) => (
-          <div key={key} className="bg-white rounded-xl border border-slate-200 p-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        {STAT_CARDS.map(({ key, label, icon: Icon, accent }) => (
+          <div key={key} className="stat-card">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-500">{label}</span>
-              <div className={`w-8 h-8 ${bg} rounded-lg flex items-center justify-center`}>
-                <Icon size={16} className={color} />
+              <span className="stat-label">{label}</span>
+              <div
+                className="w-7 h-7 rounded flex items-center justify-center"
+                style={{ background: `${accent}10` }}
+              >
+                <Icon size={14} style={{ color: accent }} />
               </div>
             </div>
-            <div className="mt-2 text-2xl font-bold text-slate-900">{stats[key]}</div>
+            <div className="stat-value">{stats[key]}</div>
           </div>
         ))}
       </div>
 
       {stats.overdue > 0 && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3">
-          <AlertTriangle size={20} className="text-red-600 shrink-0" />
+        <div className="alert alert-error mb-6">
+          <AlertTriangle size={16} className="shrink-0" />
           <div>
-            <div className="text-sm font-medium text-red-800">
-              기한 초과 민원 {stats.overdue}건
-            </div>
-            <div className="text-xs text-red-600 mt-0.5">즉시 처리가 필요합니다.</div>
+            <span className="font-medium">기한 초과 민원 {stats.overdue}건</span>
+            <span className="opacity-70 ml-1.5">— 즉시 처리가 필요합니다</span>
           </div>
         </div>
       )}
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-slate-200">
-          <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-            <h2 className="font-semibold text-slate-900">최근 민원</h2>
-            <Link href="/complaints" className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
+      <div className="grid md:grid-cols-2 gap-5 mb-5">
+        <div className="card">
+          <div className="section-header">
+            <span className="section-title">최근 민원</span>
+            <Link href="/complaints" className="link">
               전체보기 <ArrowRight size={12} />
             </Link>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div>
             {recent.length === 0 ? (
-              <div className="p-8 text-center text-sm text-slate-400">등록된 민원이 없습니다.</div>
+              <div className="p-10 text-center text-[13px]" style={{ color: 'var(--text-disabled)' }}>등록된 민원이 없습니다.</div>
             ) : (
-              recent.map((c) => (
+              recent.map((c, i) => (
                 <Link
                   key={c.id}
                   href={`/complaints/${c.id}`}
-                  className="flex items-center justify-between p-3 hover:bg-slate-50 transition-colors"
+                  className="flex items-center justify-between px-5 py-3"
+                  style={{
+                    borderBottom: i < recent.length - 1 ? '1px solid var(--surface-border)' : 'none',
+                    transition: `background var(--dur-ui) var(--ease-out)`,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-surface-raised)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent' }}
                 >
                   <div className="min-w-0">
-                    <div className="text-sm font-medium text-slate-900 truncate">{c.title}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">
-                      {c.unit_number && `${c.unit_number}동 · `}
+                    <div className="text-[13px] font-medium truncate" style={{ color: 'var(--text-primary)' }}>{c.title}</div>
+                    <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                      {c.unit_number && `${c.unit_number} · `}
                       {CATEGORY_LABELS[c.category as ComplaintCategory]}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 ml-3 shrink-0">
+                  <div className="flex items-center gap-1.5 ml-3 shrink-0">
                     <PriorityBadge priority={c.priority} />
                     <StatusBadge status={c.status} />
                   </div>
@@ -199,76 +260,74 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200">
-          <div className="p-4 border-b border-slate-100">
-            <h2 className="font-semibold text-slate-900">카테고리별 현황</h2>
+        <div className="card">
+          <div className="section-header">
+            <span className="section-title">카테고리별 현황</span>
           </div>
-          <div className="p-4 space-y-3">
+          <div className="p-5 space-y-3">
             {Object.entries(stats.byCategory)
               .sort((a, b) => b[1] - a[1])
               .map(([cat, count]) => (
                 <div key={cat} className="flex items-center gap-3">
-                  <span className="text-sm text-slate-600 w-24 shrink-0">
+                  <span className="text-[12px] w-20 shrink-0" style={{ color: 'var(--text-body)' }}>
                     {CATEGORY_LABELS[cat as ComplaintCategory]}
                   </span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-2">
+                  <div className="progress-track flex-1">
                     <div
-                      className="bg-blue-500 h-2 rounded-full transition-all"
-                      style={{ width: total ? `${(count / total) * 100}%` : '0%' }}
+                      className="progress-fill"
+                      style={{
+                        width: total ? `${(count / total) * 100}%` : '0%',
+                        background: 'var(--accent)',
+                      }}
                     />
                   </div>
-                  <span className="text-sm font-medium text-slate-700 w-8 text-right">{count}</span>
+                  <span className="text-[13px] font-semibold w-6 text-right" style={{ color: 'var(--text-primary)' }}>{count}</span>
                 </div>
               ))}
             {Object.keys(stats.byCategory).length === 0 && (
-              <div className="text-center text-sm text-slate-400 py-4">데이터 없음</div>
+              <div className="text-center text-[13px] py-4" style={{ color: 'var(--text-disabled)' }}>데이터 없음</div>
             )}
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200">
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+      <div className="card">
+        <div className="section-header">
           <div className="flex items-center gap-2">
-            <Wrench size={16} className="text-slate-500" />
-            <h2 className="font-semibold text-slate-900">시설 설비 현황</h2>
+            <Wrench size={14} style={{ color: 'var(--text-muted)' }} />
+            <span className="section-title">시설 설비 현황</span>
           </div>
-          <Link href="/facilities" className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1">
+          <Link href="/facilities" className="link">
             전체보기 <ArrowRight size={12} />
           </Link>
         </div>
-        <div className="p-4">
-          <div className="flex gap-6 mb-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-slate-900">{facilityStats.total}</div>
-              <div className="text-xs text-slate-500">전체</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-700">{facilityStats.normal}</div>
-              <div className="text-xs text-slate-500">정상</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-red-700">{facilityStats.broken}</div>
-              <div className="text-xs text-slate-500">고장</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-700">{facilityStats.repairing}</div>
-              <div className="text-xs text-slate-500">수리중</div>
-            </div>
+        <div className="p-5">
+          <div className="flex gap-8 mb-4">
+            {[
+              { v: facilityStats.total, l: '전체', c: 'var(--text-primary)' },
+              { v: facilityStats.normal, l: '정상', c: '#059669' },
+              { v: facilityStats.broken, l: '고장', c: '#DC2626' },
+              { v: facilityStats.repairing, l: '수리중', c: '#EA580C' },
+            ].map(({ v, l, c }) => (
+              <div key={l} className="text-center">
+                <div className="text-[24px] font-bold" style={{ color: c, letterSpacing: '-0.03em' }}>{v}</div>
+                <div className="text-[11px] mt-0.5" style={{ color: 'var(--text-muted)' }}>{l}</div>
+              </div>
+            ))}
           </div>
           {facilityStats.facilities.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-2 pt-3" style={{ borderTop: '1px solid var(--surface-border)' }}>
               {facilityStats.facilities.map((f) => (
-                <div key={f.name} className="flex items-center gap-2 text-sm">
-                  <span className="text-slate-700 font-medium">{f.name}</span>
-                  {f.broken > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">고장 {f.broken}</span>}
-                  {f.repairing > 0 && <span className="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">수리중 {f.repairing}</span>}
+                <div key={f.name} className="flex items-center gap-2 text-[13px]">
+                  <span className="font-medium" style={{ color: 'var(--text-primary)' }}>{f.name}</span>
+                  {f.broken > 0 && <span className="badge" style={{ background: '#FEE2E2', color: '#991B1B' }}>고장 {f.broken}</span>}
+                  {f.repairing > 0 && <span className="badge" style={{ background: '#FFEDD5', color: '#9A3412' }}>수리중 {f.repairing}</span>}
                 </div>
               ))}
             </div>
           )}
           {facilityStats.total === 0 && (
-            <div className="text-center text-sm text-slate-400 py-2">등록된 설비 없음</div>
+            <div className="text-center text-[13px] py-2" style={{ color: 'var(--text-disabled)' }}>등록된 설비 없음</div>
           )}
         </div>
       </div>

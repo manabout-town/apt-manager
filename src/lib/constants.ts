@@ -1,4 +1,4 @@
-import type { ComplaintStatus, ComplaintPriority, ComplaintCategory, EmployeeRole, Department, FacilityType, EquipmentStatus, MaintenanceType, MaintenanceStatus } from './types'
+import type { ComplaintStatus, ComplaintPriority, ComplaintCategory, EmployeeRole, Department, FacilityType, EquipmentStatus, MaintenanceType, MaintenanceStatus, AnnouncementType, ShiftType } from './types'
 
 export const STATUS_LABELS: Record<ComplaintStatus, string> = {
   received: '접수',
@@ -96,4 +96,28 @@ export const MAINTENANCE_STATUS_COLORS: Record<MaintenanceStatus, string> = {
   pending: 'bg-yellow-100 text-yellow-800',
   in_progress: 'bg-blue-100 text-blue-800',
   completed: 'bg-green-100 text-green-800',
+}
+
+export const ANNOUNCEMENT_TYPE_LABELS: Record<AnnouncementType, string> = {
+  notice: '공지',
+  urgent: '긴급',
+  message: '전달',
+}
+
+export const ANNOUNCEMENT_TYPE_COLORS: Record<AnnouncementType, string> = {
+  notice: 'bg-blue-100 text-blue-800',
+  urgent: 'bg-red-100 text-red-800',
+  message: 'bg-slate-100 text-slate-700',
+}
+
+export const SHIFT_LABELS: Record<ShiftType, string> = {
+  morning: '오전',
+  afternoon: '오후',
+  night: '야간',
+}
+
+export const SHIFT_COLORS: Record<ShiftType, string> = {
+  morning: 'bg-amber-100 text-amber-800',
+  afternoon: 'bg-sky-100 text-sky-800',
+  night: 'bg-indigo-100 text-indigo-800',
 }
