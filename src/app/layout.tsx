@@ -18,7 +18,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AuthProvider>
           <ToastProvider>
             <Sidebar />
-            <main className="md:ml-60 min-h-screen">{children}</main>
+            <main className="md:mr-60 min-h-screen">{children}</main>
             <SwRegister />
           </ToastProvider>
         </AuthProvider>

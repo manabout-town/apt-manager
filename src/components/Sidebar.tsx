@@ -41,8 +41,8 @@ export default function Sidebar() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-4 left-4 z-50 md:hidden p-2 rounded-md"
-        style={{ background: 'var(--bg-sidebar)', color: 'var(--text-primary)' }}
+        className="fixed top-4 right-4 z-50 md:hidden p-2 rounded-md"
+        style={{ background: '#2b7a6f', color: '#fff' }}
       >
         <Menu size={18} />
       </button>
@@ -56,15 +56,16 @@ export default function Sidebar() {
       )}
 
       <aside
-        className={`fixed top-0 left-0 h-full w-60 flex flex-col z-50 md:translate-x-0 ${
-          open ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-0 right-0 h-full w-60 flex flex-col z-50 md:translate-x-0 ${
+          open ? 'translate-x-0' : 'translate-x-full'
         }`}
         style={{
-          background: 'var(--bg-sidebar)',
+          background: '#f5f1eb',
+          borderLeft: '1px solid #e0d9cf',
           transition: `transform var(--dur-reveal) var(--ease-expo)`,
         }}
       >
-        <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <div className="px-5 py-4 flex items-center justify-between" style={{ borderBottom: '1px solid #e0d9cf' }}>
           <div className="flex items-center gap-2.5">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
               <rect x="2" y="8" width="9" height="14" rx="1.5" fill="rgba(43,122,111,0.6)" stroke="rgba(43,122,111,0.9)" strokeWidth="0.5" />
@@ -83,11 +84,11 @@ export default function Sidebar() {
               <rect x="18.2" y="13" width="1.8" height="1.5" rx="0.3" fill="rgba(255,215,100,0.5)" />
               <rect x="15.5" y="16.5" width="1.8" height="1.5" rx="0.3" fill="rgba(255,215,100,0.3)" />
               <rect x="18.2" y="16.5" width="1.8" height="1.5" rx="0.3" fill="rgba(255,215,100,0.6)" />
-              <line x1="1" y1="22.5" x2="23" y2="22.5" stroke="rgba(255,255,255,0.15)" strokeWidth="0.5" />
+              <line x1="1" y1="22.5" x2="23" y2="22.5" stroke="rgba(43,122,111,0.2)" strokeWidth="0.5" />
             </svg>
-            <span className="font-semibold text-[15px] text-white tracking-tight">APT 관리</span>
+            <span className="font-semibold text-[15px] tracking-tight" style={{ color: '#1a1a1a' }}>APT 관리</span>
           </div>
-          <button onClick={() => setOpen(false)} className="md:hidden text-white/50 hover:text-white">
+          <button onClick={() => setOpen(false)} className="md:hidden" style={{ color: '#999' }}>
             <X size={18} />
           </button>
         </div>
@@ -102,14 +103,14 @@ export default function Sidebar() {
                 onClick={() => setOpen(false)}
                 className="flex items-center gap-2.5 px-3 py-2 rounded-md"
                 style={{
-                  background: active ? 'rgba(255,255,255,0.1)' : 'transparent',
-                  color: active ? '#fff' : 'rgba(255,255,255,0.55)',
+                  background: active ? '#2b7a6f' : 'transparent',
+                  color: active ? '#fff' : '#3d3d3d',
                   transition: `all var(--dur-ui) var(--ease-out)`,
                   fontSize: '13px',
                   fontWeight: active ? 500 : 400,
                 }}
                 onMouseEnter={(e) => {
-                  if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                  if (!active) e.currentTarget.style.background = 'rgba(43,122,111,0.08)'
                 }}
                 onMouseLeave={(e) => {
                   if (!active) e.currentTarget.style.background = 'transparent'
@@ -122,64 +123,21 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="px-3 pb-1">
-          <svg viewBox="0 0 210 65" className="w-full" fill="none">
-            <rect x="5" y="30" width="28" height="33" rx="1.5" fill="rgba(255,255,255,0.06)" />
-            <rect x="10" y="35" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.35)" />
-            <rect x="23" y="35" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.55)" />
-            <rect x="10" y="42" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.25)" />
-            <rect x="23" y="42" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.45)" />
-            <rect x="10" y="49" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.5)" />
-            <rect x="23" y="49" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.2)" />
-            <rect x="38" y="8" width="38" height="55" rx="1.5" fill="rgba(255,255,255,0.08)" />
-            <rect x="45" y="14" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.5)" />
-            <rect x="64" y="14" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.3)" />
-            <rect x="45" y="22" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.7)" />
-            <rect x="64" y="22" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.4)" />
-            <rect x="45" y="30" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.3)" />
-            <rect x="64" y="30" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.6)" />
-            <rect x="45" y="38" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.5)" />
-            <rect x="64" y="38" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.2)" />
-            <rect x="45" y="46" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.4)" />
-            <rect x="64" y="46" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.7)" />
-            <rect x="82" y="22" width="32" height="41" rx="1.5" fill="rgba(255,255,255,0.05)" />
-            <rect x="88" y="27" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.45)" />
-            <rect x="103" y="27" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.3)" />
-            <rect x="88" y="35" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.6)" />
-            <rect x="103" y="35" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.2)" />
-            <rect x="88" y="43" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.3)" />
-            <rect x="103" y="43" width="4" height="3" rx="0.5" fill="rgba(255,210,100,0.55)" />
-            <rect x="120" y="15" width="42" height="48" rx="1.5" fill="rgba(255,255,255,0.07)" />
-            <rect x="127" y="20" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.4)" />
-            <rect x="150" y="20" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.6)" />
-            <rect x="127" y="28" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.65)" />
-            <rect x="150" y="28" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.3)" />
-            <rect x="127" y="36" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.25)" />
-            <rect x="150" y="36" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.5)" />
-            <rect x="127" y="44" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.5)" />
-            <rect x="150" y="44" width="5" height="3" rx="0.5" fill="rgba(255,210,100,0.35)" />
-            <circle cx="36" cy="58" r="4" fill="rgba(43,122,111,0.25)" />
-            <circle cx="117" cy="58" r="3.5" fill="rgba(43,122,111,0.2)" />
-            <circle cx="165" cy="58" r="4.5" fill="rgba(43,122,111,0.22)" />
-            <rect x="0" y="62" width="210" height="1" rx="0.5" fill="rgba(255,255,255,0.04)" />
-          </svg>
-        </div>
-
         {employee && (
-          <div className="px-4 py-3" style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-            <div className="text-[13px] font-medium text-white/90">{employee.name}</div>
-            <div className="text-[11px] mt-0.5" style={{ color: 'rgba(255,255,255,0.4)', letterSpacing: '0.03em' }}>
+          <div className="px-4 py-3" style={{ borderTop: '1px solid #e0d9cf' }}>
+            <div className="text-[13px] font-medium" style={{ color: '#1a1a1a' }}>{employee.name}</div>
+            <div className="text-[11px] mt-0.5" style={{ color: '#888', letterSpacing: '0.03em' }}>
               {ROLE_LABELS[employee.role]}
             </div>
             <button
               onClick={signOut}
               className="mt-2.5 flex items-center gap-1.5 text-[12px]"
               style={{
-                color: 'rgba(255,255,255,0.35)',
+                color: '#999',
                 transition: `color var(--dur-ui) var(--ease-out)`,
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.8)' }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = '#333' }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = '#999' }}
             >
               <LogOut size={13} />
               로그아웃
